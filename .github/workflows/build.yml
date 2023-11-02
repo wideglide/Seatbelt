@@ -32,24 +32,11 @@ jobs:
 
     - name: MSBuild
       run: |
-        msbuild.exe Seatbelt.sln /p:Configuration=Release /p:Platform="Any CPU" /p:OutputPath=compiled/
+        dotnet msbuild Seatbelt.sln /p:Configuration=Release /p:Platform="Any CPU" /p:OutputPath=compiled/
         ls
-        Copy-Item -Path Seatbelt\compiled\Seatbelt.exe -Destination compiled\Seatbelt.exe
 
-    - name: Build Package
-      run: |
-        $Version = git.exe describe --tags --abbrev=0
-        $Version = "`"$Version`""
-        Get-Content -Path alias.json | .\jq.exe ".version |= `"$Version`"" > ./compiled/alias.json
-        Copy-Item -Path LICENSE -Destination compiled\LICENSE
-        cd compiled
-        ls
-        tar.exe -czvf ..\seatbelt.tar.gz .
-      
-    - name: "Publish Release"
-      uses: "marvinpinto/action-automatic-releases@latest"
+    - name: Upload build
+      uses: actions/upload-artifact@v3
       with:
-        repo_token: "${{ secrets.GITHUB_TOKEN }}"
-        prerelease: false
-        files: |
-          seatbelt.tar.gz
+        name: Seatbelt
+        path: Seatbelt\compiled\Seatbelt.exe
