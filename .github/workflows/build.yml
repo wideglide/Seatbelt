@@ -6,17 +6,12 @@ jobs:
 
   linux-windows-build:
     name: CSharp Build
-    runs-on: windows-latest
+    runs-on: windows-2019
     timeout-minutes: 45
     steps:
 
     - name: Add msbuild to PATH
       uses: microsoft/setup-msbuild@v1.1
-
-    - name: Setup dotnet
-      uses: actions/setup-dotnet@v3
-      with:
-        dotnet-version: '3.1.x'
   
     - name: Check out code
       uses: actions/checkout@v4
@@ -32,7 +27,7 @@ jobs:
 
     - name: MSBuild
       run: |
-        dotnet msbuild Seatbelt.sln /p:Configuration=Release /p:Platform="Any CPU" /p:OutputPath=compiled/
+        msbuild.exe Seatbelt.sln /p:Configuration=Release /p:Platform="Any CPU" /p:OutputPath=compiled/
         ls
 
     - name: Upload build
