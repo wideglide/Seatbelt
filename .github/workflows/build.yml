@@ -1,4 +1,4 @@
-name: Release
+name: Seatbelt
 
 on: workflow_dispatch
 
