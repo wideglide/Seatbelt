@@ -27,6 +27,7 @@ jobs:
     - name: MSBuild
       run: |
         dotnet restore GenericPotato.sln
+        nuget restore GenericPotato.sln
         msbuild.exe GenericPotato.sln /p:Configuration=Release /p:Platform="Any CPU" /p:OutputPath=compiled/
         ls
 
