@@ -1,0 +1,41 @@
+name: GenericPotato
+
+on: workflow_dispatch
+
+jobs:
+
+  linux-windows-build:
+    name: CSharp Build
+    runs-on: windows-2019
+    timeout-minutes: 45
+    defaults:
+      run:
+        working-directory: ./SharpRDP
+    steps:
+
+    - name: Add msbuild to PATH
+      uses: microsoft/setup-msbuild@v1.1
+  
+    - name: Check out code
+      uses: actions/checkout@v4
+      with:
+        repository: 0xthirteen/SharpRDP
+
+    - name: Download Tools
+      run: |
+        [Net.ServicePointManager]::SecurityProtocol = [Net.SecurityProtocolType]::Tls12
+        Invoke-WebRequest -Uri https://github.com/stedolan/jq/releases/download/jq-1.6/jq-win64.exe -OutFile jq.exe
+        Invoke-WebRequest -Uri https://github.com/moloch--/minisign/releases/download/v0.2.1/minisign.exe -OutFile minisign.exe
+
+    - name: MSBuild
+      run: |
+        dotnet restore SharpRDP.sln
+        nuget restore SharpRDP.sln
+        msbuild.exe SharpRDP.sln /p:Configuration=Release /p:Platform="Any CPU" /p:OutputPath=compiled/
+        ls
+
+    - name: Upload build
+      uses: actions/upload-artifact@v3
+      with:
+        name: SharpRDP
+        path: SharpRDP\compiled\SharpRDP.exe
