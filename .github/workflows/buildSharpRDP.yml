@@ -38,4 +38,4 @@ jobs:
       uses: actions/upload-artifact@v3
       with:
         name: SharpRDP
-        path: SharpRDP\compiled\SharpRDP.exe
+        path: SharpRDP\SharpRDP\compiled\SharpRDP.exe
