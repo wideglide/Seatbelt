@@ -1,4 +1,4 @@
-name: GenericPotato
+name: SharpRDP
 
 on: workflow_dispatch
 
